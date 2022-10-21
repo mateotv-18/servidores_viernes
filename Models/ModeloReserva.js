@@ -23,10 +23,10 @@ const EsquemaReserva = new Schema({
         required: true,
         type: Number
     },
-    // costoReserva: {
-    //     required: true,
-    //     type: Number
-    // }
+    costoReserva: {
+        required: false,
+        type: Number
+    }
 });
 
 export const modeloReserva = mongoose.model('reservas', EsquemaReserva);

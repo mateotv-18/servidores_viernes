@@ -11,8 +11,7 @@ export class ServicioReserva {
     } 
     async agregarReservaEnDB(reserva) {
         let datosValues = new modeloReserva(reserva);
-        return 'Exito Campeon';
-        // return await datosValues.save();
+        return await datosValues.save();
     }
     async editarReserva(id, reserva) {
         return await modeloReserva.findByIdAndUpdate(id, reserva);
