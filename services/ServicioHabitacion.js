@@ -18,10 +18,13 @@ export class ServicioHabitacion {
 
     async editarHabitacion(id, habitacion) {
         return await modeloHabitacion.findByIdAndUpdate(id, habitacion);
-    }  
+    }
 
-    async costoReserva(valorNoche) {
-        await modeloHabitacion.findOne()
+    async costoReserva(id, valorNoche) {
+        return await modeloHabitacion.find({
+            id: id,
+            valorNoche: valorNoche
+        });
     }
 }
 

@@ -2,10 +2,10 @@ import express from 'express';
 import { ControladorHabitacion } from '../Controllers/ControladorHabitacion.js';
 import { ControladorReserva } from '../Controllers/ControladorReservas.js';
 
-let controladorHabitacion = new ControladorHabitacion() //usando el controlador
-let controladorReserva = new ControladorReserva()
+let controladorHabitacion = new ControladorHabitacion(); //usando el controlador
+let controladorReserva = new ControladorReserva();
 
-export let rutasPersonalizadas = express.Router()
+export let rutasPersonalizadas = express.Router();
 
 rutasPersonalizadas.get('/hotelesnick/habitaciones', controladorHabitacion.buscarHabitaciones);
 rutasPersonalizadas.get('/hotelesnick/habitacion/:id', controladorHabitacion.buscarHabitacionPorId);

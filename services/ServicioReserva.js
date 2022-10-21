@@ -16,6 +16,5 @@ export class ServicioReserva {
     }
     async editarReserva(id, reserva) {
         return await modeloReserva.findByIdAndUpdate(id, reserva);
-    }
-    
+    }    
 }

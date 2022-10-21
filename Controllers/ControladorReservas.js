@@ -40,15 +40,15 @@ export class ControladorReserva {
     async registrarReserva(request, response) {
         let datosReserva = request.body;
         let objetoServicioReservas = new ServicioReserva();
-        let objetoServicioHabitacion = new ServicioHabitacion();
+        let objetoServicioHabitacion = new ServicioHabitacion();        
         let fechaInicio = new Date(datosReserva.fechaInicio);
         let fechaSalida = new Date(datosReserva.fechaSalida);
         console.log(fechaInicio);
         console.log(fechaSalida);
         let restaDate = fechaSalida.getTime() - fechaInicio.getTime();
-        console.log(Math.round(restaDate / (1000 * 60 * 60 * 24)));  
-        console.log(objetoServicioHabitacion.valorNoche);
-
+        console.log(Math.round(restaDate / (1000 * 60 * 60 * 24)));        
+   
+        // console.log(costo * restaDate);
         // console.log(datosReserva.fechaSalida.getTime())
         // console.log(datosReserva.fechaInicio.getTime())
         // let costoReserva = (datosReserva.fechaSalida.getDay()) - (datosReserva.fechaInicio.getDay());    
@@ -61,9 +61,9 @@ export class ControladorReserva {
                 });
                 return;
             }
-            if (datosReserva.fechaInicio > datosReserva.fechaSalida) {
+            if (datosReserva.fechaInicio >= datosReserva.fechaSalida) {
                 response.status(400).json({
-                    "mensaje": "La fecha de entrada no puede ser mayor a la fecha de salida",
+                    "mensaje": "La fecha de entrada no puede ser mayor o igual que la fecha de salida",
                     "datos": null
                 });
                 return;
@@ -107,9 +107,43 @@ export class ControladorReserva {
     async editarReserva(request, response) {
         let datosReserva = request.body;
         let objetoServicioReservas = new ServicioReserva();
-        let objetoServicioHabitaciones = new ServicioHabitacion();
-        objetoServicioHabitaciones.buscarIdHabitacion(datosReserva.idHabitacion);
+        let objetoServicioHabitacion = new ServicioHabitacion();      
         try {
+            if (!isValidObjectId(await objetoServicioHabitacion.buscarHabitacionPorId(datosReserva.idHabitacion))) {
+                response.status(400).json({
+                    "mensaje": "id de habitación no valido",
+                    "datos": null
+                });
+                return;
+            }
+            if (datosReserva.fechaInicio > datosReserva.fechaSalida) {
+                response.status(400).json({
+                    "mensaje": "La fecha de entrada no puede ser mayor a la fecha de salida",
+                    "datos": null
+                });
+                return;
+            }
+            if ((datosReserva.numAdultos + datosReserva.numNiños) > 8) {
+                response.status(400).json({
+                    "mensaje": "El número maximo de personas permitidas es 8",
+                    "datos": null
+                });
+                return;
+            }
+            if (datosReserva.numAdultos < 1) {
+                response.status(400).json({
+                    "mensaje": "Debe haber por lo menos 1 mayor de edad",
+                    "datos": null
+                });
+                return;
+            }
+            if (datosReserva.numNiños < 0) {
+                response.status(400).json({
+                    "mensaje": "Número no valido. Si no hay niños poner el número 0 ",
+                    "datos": null
+                });
+                return;
+            }
             await objetoServicioReservas.editarReserva(id, datosReserva);
             response.status(200).json({
                 "mensaje": "Exito editando la reserva con el id: " + id,
